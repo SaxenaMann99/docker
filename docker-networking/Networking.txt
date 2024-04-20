@@ -1,0 +1,29 @@
+Docker networking
+
+Docker networking tells us how Docker containers to communicate with each other and with external networks. 
+Docker provides various networking options, each suited for different use cases.
+
+V.V.Imp videos 
+
+** Watch this video - https://www.youtube.com/watch?v=xrUGEoUpa3s **   
+** Interview questions - https://www.youtube.com/watch?v=I6ZBUEc4LrU **    
+
+
+1. Bridge networking (default); Docker creates a default bridge network named bridge when it's installed.
+                                Containers on the same bridge network can communicate with each other.
+                                Example:
+                                    $ docker network create my_bridge_network
+                                    $ docker run -d --name container1 --network my_bridge_network nginx
+                                    $ docker run -d --name container2 --network my_bridge_network nginx
+
+2. Host Network;  Containers use the host's network stack directly, bypassing Docker's network abstraction.
+                  It can be more performant but lacks network isolation.
+                  Example:
+                    docker run -d --name container1 --network host nginx
+
+3. Overlay Network; Enables communication between containers across multiple Docker hosts in a swarm.
+                    It's useful for distributed applications.
+                    Example: 
+                        docker network create --driver overlay my_overlay_network
+                        docker service create --name service1 --network my_overlay_network nginx
+                        docker service create --name service2 --network my_overlay_network nginx

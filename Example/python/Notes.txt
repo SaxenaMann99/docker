@@ -1,0 +1,22 @@
+Create the image; 
+- $ docker build -t python-app-test .
+
+Run the container which runs on port 4000 on host machine and 5000 on container port. 
+- $ docker run -d -p 4000:5000 python-app-test
+
+Test your application
+- Hit http://localhost:4000 on web
+
+
+Tag and push the image 
+- First create a repository in dockerhub. 
+  I have created with name python_fask_2024
+
+    $ docker tag python-app-test mannsaxenaxebia/python_fask_2024:v1-15-april
+    $ docker push mannsaxenaxebia/python_fask_2024:v1-15-april
+
+Where, 
+    Username      ; mannsaxenaxebia
+    Repository    ; python_fask_2024
+    image name    ; python-app-testn
+    tag           ; v1-15-april

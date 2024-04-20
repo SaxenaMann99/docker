@@ -1,0 +1,6 @@
+dummy.txt
+node_modules
+*.txt
+npm.cmd
+node.exe
+.dockerfile

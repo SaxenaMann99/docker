@@ -1,0 +1,7 @@
+This is a dummy file. 
+We dont want this file to be included in our docker image 
+so we will add this file in .dockerignore
+.dockerignore is simply like .gitignore to ignore files
+
+Apart from this, we have also created testcode1.txt and testcode2.txt
+we can also add files with specific extension in .dockerignore
