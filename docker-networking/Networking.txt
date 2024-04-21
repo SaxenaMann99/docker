@@ -12,7 +12,7 @@ V.V.Imp videos
 1. Bridge networking (default); Docker creates a default bridge network named bridge when it's installed.
                                 Containers on the same bridge network can communicate with each other.
                                 Example:
-                                    $ docker network create my_bridge_network
+                                    $ docker network create -d bridge my_bridge_network
                                     $ docker run -d --name container1 --network my_bridge_network nginx
                                     $ docker run -d --name container2 --network my_bridge_network nginx
 

@@ -1,0 +1,80 @@
+Dockerfile steps; 
+
+Write a dockerfile
+    FROM python:3.9-slim                        # Use the official Python image as a base image. This image is based on debian. 
+    WORKDIR /app                                # Set the working directory in the container
+    COPY . /app                                 # Copy the current directory contents into the container at /app
+    RUN pip install --no-cache-dir Flask        # Install Flask and dependencies
+    EXPOSE 5000                                 # Expose the Flask application port
+    CMD ["python3", "webapp.py"]                # Define the command to run the Flask application when the container starts
+
+
+Create the image; 
+- $ docker build -t python-app-test .
+
+Run the container which runs on port 4000 on host machine and 5000 on container port. 
+- $ docker run -d -p 4000:5000 python-app-test
+
+Test your application
+- Hit http://localhost:4000 on web
+
+
+Tag and push the image 
+- First create a repository in dockerhub. 
+  I have created with name python_fask_2024
+
+    $ docker tag python-app-test mannsaxenaxebia/python_fask_2024:v1-15-april
+    $ docker push mannsaxenaxebia/python_fask_2024:v1-15-april
+
+    Where, 
+        Username      ; mannsaxenaxebia
+        Repository    ; python_fask_2024
+        image name    ; python-app-testn
+        tag           ; v1-15-april
+
+
+**
+Q. What is the difference between "expose" in dockerfile and "publish" command (-p) in Docker run command?
+   What is the point of exposing a port in the Dockerfile, if it will be published anyway?
+   Would there ever be a need to expose a port first, and not publish it later?
+   
+A. Link - https://stackoverflow.com/questions/22111060/what-is-the-difference-between-expose-and-publish-in-docker
+
+   - Basically, you have three (four) options:
+    1. Neither specify EXPOSE nor -p
+    2. Only specify EXPOSE
+    3. Specify EXPOSE and -p
+    4. Only specify -p which implicitly does EXPOSE
+    
+   1. If you specify neither EXPOSE nor -p, the service in the container will only be accessible from inside the container itself.
+
+   2. If you EXPOSE a port, the service in the container is not accessible from outside Docker, but from inside other Docker containers. 
+      So this is good for inter-container communication.
+
+   3. If you EXPOSE and -p a port, the service in the container is accessible from anywhere, even outside Docker.
+
+   4. If you do -p, but do not EXPOSE, Docker does an implicit EXPOSE. This is because if a port is open to the public, it is automatically also open to other 
+      Docker containers. Hence -p includes EXPOSE. This is effectively same as 3.
+
+   - The reason why both are separated is IMHO because:
+
+   - Choosing a host port depends on the host and hence does not belong to the Dockerfile (otherwise it would be depending on the host),
+     and often it's enough if a service in a container is accessible from other containers.
+
+
+**
+Q. How to provide env variable at runtime?
+A. $ docker run -d \
+      -e VARIABLE_NAME=variable_value \
+      -p HOST_PORT:CONTAINER_PORT \
+      --name container_name \
+      image_name
+
+   $ docker run -d \
+      -e ENV_VAR=123 \
+      -p 8080:80 \
+      --name my_nginx_container \
+      nginx
+
+
+
