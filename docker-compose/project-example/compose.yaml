@@ -1,0 +1,54 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:5000"                                     # Maps host port 8000 to container port 5000
+    networks:
+      - mynetwork                                       # Attaches the service to the custom network named mynetwork
+    volumes:
+      - app_data:/app/data                              # Mounts the app_data volume to /app/data in the container
+      - app_data:/app/logs                              # Mounts the app_data volume to /app/logs in the container
+      - ./log:/app/logs                                 # Binds the ./log directory on the host to /app/logs in the container
+    restart: always
+
+  redis:
+    image: "redis:alpine"                                 # Uses the Redis Alpine image from Docker Hub
+    networks:
+      - mynetwork                                         # Attaches the service to the custom network named mynetwork
+    volumes:
+      - redis_data:/data                                  # Mounts the redis_data volume to /data in the container
+    restart: always                                       # Always restart the container if it exits
+
+networks:                                                 # Defines a custom bridge network named mynetwork
+  mynetwork:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local                                         # Defines a local volume named redis_data
+  app_data:
+
+#Explanation:
+
+#web Service:
+  #Build: Builds the Docker image using the Dockerfile in the current directory (.).
+  #Ports: Maps port 8000 on the host to port 5000 on the container.
+  #Networks: Attaches the service to the custom bridge network named mynetwork.
+  #Volumes:
+    #app_data:/app/data: Mounts the app_data volume to /app/data in the container.
+    #app_data:/app/logs: Mounts the app_data volume to /app/logs in the container. This will ensure the data in /app/logs is persistent between container restarts.
+    #./log:/app/logs: Binds the ./log directory on the host to /app/logs in the container. This allows logs to be visible and updated on the host machine simultaneously.
+  #Restart: Specifies that the container should always be restarted if it exits.
+
+#redis Service:
+# Image: Uses the Redis Alpine image from Docker Hub.
+# Networks: Attaches the service to the custom bridge network named mynetwork.
+# Volumes:
+#   redis_data:/data: Mounts the redis_data volume to /data in the container.
+# Restart: Specifies that the container should always be restarted if it exits.
+# Networks: Defines a custom bridge network named mynetwork.
+# Volumes:  Defines two volumes:
+#   redis_data: A local volume named redis_data.
+#   app_data: An anonymous volume that Docker will manage. This will be used to share data between the web service's /app/data and /app/logs.
+
+#With this setup, your Flask application (web service) will run on port 8000 on the host, and you can access it at http://localhost:8000/. The logs will be written to ./log directory on the host machine and will be accessible and updated simultaneously with the container logs.

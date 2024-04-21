@@ -1,0 +1,40 @@
+- Docker Compose is a tool that simplifies the management of multi-container Docker applications. 
+- Instead of using long, complex Docker commands to start and manage containers, Docker Compose lets you define your application's services, networks, and volumes  
+  in a single file called docker-compose.yml. 
+- This file acts like a recipe for your entire application stack.
+
+- In simple terms, Docker Compose helps you orchestrate multiple containers that work together as one application. You define what containers you need, how they 
+  should interact, and any additional configurations, all in one easy-to-read YAML file.
+
+
+version: '3'                                                                            # Docker Compose version
+services:                                                                               # Defining services or containers
+  web:                                                                                  # First service/container named 'web'
+    build: /frontend                                                                    # build the image from dockerfile present in the frontend folder
+    ports:                                                                              # Exposing ports
+      - "8080:80"                                                                       # Host:Container
+    volumes:                                                                            # Mounting volumes
+      - ./html:/usr/share/nginx/html                                                    # Host:Container
+    networks:                                                                           # Defining networks
+      - my_network                                                                      # Using network named 'my_network'
+    environment:                                                                        # Setting environment variables
+      - ENV_VARIABLE=example
+  db:                                                                                   # Second service/container named 'db'
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=example
+    networks:
+      - my_network
+    volumes:
+      - db_data:/var/lib/mysql
+networks:                                                                               # Defining networks
+  my_network:                                                                           # Network named 'my_network'
+volumes:                                                                                # Defining volumes
+  db_data:                                                                              # Volume named 'db_data'
+
+
+Difference from Kubernetes:
+
+Kubernetes is a more powerful orchestration tool, designed for large-scale container deployments. While Docker Compose is great for development and small to 
+medium-sized projects, Kubernetes offers more advanced features like automatic scaling, self-healing, and rolling updates. Docker Compose is simpler and more 
+straightforward, while Kubernetes is more complex but better suited for large-scale production environments.  
